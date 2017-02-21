@@ -6,6 +6,35 @@ from plotly.graph_objs import *
 # FIXME: Graph generated shows that as wind speed increases, the angle at which
 # it increases ground speed increases past 90deg.  This is clearly incorrect.
 
+def cart2pol(x, y):
+    theta = np.rad2deg(np.arctan2(y, x))
+    r = np.hypot(x, y)
+    return r, theta
+
+def pol2cart(r, theta):
+    x = r * np.sin(np.deg2rad(theta))
+    y = r * np.cos(np.deg2rad(theta))
+    return x, y
+
+def vec(r, theta):
+    return np.array(pol2cart(r, theta))
+
+
+class Plane:
+    def __init__(self, U_wind, D_wind):
+        '''Speed and direction of wind.  All angles are relative to course.
+        This is analagous to a plane always travelling north.'''
+        self.wind = vec(U_wind, D_wind)
+
+    def get_heading(self):
+        crab_component = -self.wind[1]  # XXX x?
+        course_component = np.sqrt(1 - self.wind[1]**2)
+        return np.array([crab_component, course_component])
+
+    def get_groundspeed(self):
+        return self.get_heading() + self.wind
+
+
 def wind_correction(wind, angle):
     '''Takes wind speed and wind - course angle'''
     return -np.rad2deg(np.arcsin(wind*np.sin(np.deg2rad(angle))))
@@ -45,4 +74,6 @@ layout = Layout(
     )
 )
 fig = Figure(data=data, layout=layout)
-plotly.offline.plot(fig)
+
+if __name__ == "__main__":
+    plotly.offline.plot(fig)
