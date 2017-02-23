@@ -8,7 +8,7 @@ from plotly.graph_objs import *
 
 def wind_correction(wind, angle):
     '''Takes wind speed and wind - course angle'''
-    return np.rad2deg(np.arcsin(wind*np.sin(np.deg2rad(angle))))
+    return -np.rad2deg(np.arcsin(wind*np.sin(np.deg2rad(angle))))
 
 def groundspeed(wind, angle):
     '''Takes wind speed and heading - wind angle.
