@@ -67,7 +67,6 @@ layout = Layout(
     title='Ground Speed',
     orientation=-90,
     xaxis=dict(
-        autotick=False,
         ticks='outside',
         tick0=0,
         dtick=10
